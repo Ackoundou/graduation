@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Placement des invités 🎓</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=Inter:wght@300;400;500&display=swap');
+
+    :root {
+      --gold: #C9A96E;
+      --gold-light: #E8D5B0;
+      --cream: #FAF7F2;
+      --dark: #1C1A17;
+      --muted: #7A7268;
+      --card: #FFFFFF;
+      --border: #EDE8DF;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      background: var(--cream);
+      color: var(--dark);
+      font-family: 'Inter', sans-serif;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 40px 20px 60px;
+    }
+
+    /* ── HEADER ── */
+    header {
+      text-align: center;
+      margin-bottom: 48px;
+    }
+
+    .rings {
+      font-size: 2rem;
+      margin-bottom: 12px;
+      letter-spacing: 4px;
+    }
+
+    h1 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(2rem, 6vw, 3rem);
+      font-weight: 400;
+      color: var(--dark);
+      line-height: 1.15;
+    }
+
+    h1 em {
+      font-style: italic;
+      color: var(--gold);
+    }
+
+    .subtitle {
+      margin-top: 10px;
+      font-size: 0.85rem;
+      color: var(--muted);
+      font-weight: 300;
+      letter-spacing: 0.04em;
+    }
+
+    /* ── DIVIDER ── */
+    .divider {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin: 24px auto;
+      width: 240px;
+      color: var(--gold);
+    }
+    .divider::before,
+    .divider::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: var(--gold-light);
+    }
+    .divider-icon { font-size: 0.9rem; }
+
+    /* ── SEARCH BOX ── */
+    .search-wrap {
+      width: 100%;
+      max-width: 420px;
+      margin-bottom: 32px;
+    }
+
+    label {
+      display: block;
+      font-size: 0.75rem;
+      font-weight: 500;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 10px;
+    }
+
+    .input-row {
+      display: flex;
+      gap: 10px;
+    }
+
+    input[type="text"] {
+      flex: 1;
+      padding: 14px 18px;
+      border: 1.5px solid var(--border);
+      border-radius: 12px;
+      background: var(--card);
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.2rem;
+      color: var(--dark);
+      outline: none;
+      transition: border-color 0.2s;
+    }
+    input[type="text"]::placeholder { color: #C4BFB6; }
+    input[type="text"]:focus { border-color: var(--gold); }
+
+    button {
+      padding: 0 22px;
+      background: var(--gold);
+      color: #fff;
+      border: none;
+      border-radius: 12px;
+      font-size: 1.2rem;
+      cursor: pointer;
+      transition: background 0.2s, transform 0.1s;
+    }
+    button:active { transform: scale(0.97); }
+    button:hover { background: #b8935a; }
+
+    /* ── RESULTS ── */
+    #results { width: 100%; max-width: 420px; }
+
+    .result-card {
+      background: var(--card);
+      border: 1.5px solid var(--border);
+      border-radius: 16px;
+      padding: 24px 26px;
+      margin-bottom: 14px;
+      display: flex;
+      align-items: center;
+      gap: 18px;
+      animation: fadeUp 0.3s ease both;
+    }
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(10px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    .result-icon {
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--gold-light), var(--gold));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.3rem;
+      flex-shrink: 0;
+    }
+
+    .result-info { flex: 1; }
+
+    .result-name {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.45rem;
+      font-weight: 600;
+      color: var(--dark);
+      line-height: 1.2;
+    }
+
+    .result-table {
+      margin-top: 5px;
+      font-size: 0.8rem;
+      font-weight: 500;
+      letter-spacing: 0.07em;
+      text-transform: uppercase;
+      color: var(--gold);
+    }
+
+    .result-table span {
+      background: #FDF5E8;
+      padding: 3px 10px;
+      border-radius: 20px;
+      border: 1px solid var(--gold-light);
+    }
+
+    /* ── EMPTY / ERROR ── */
+    .msg {
+      text-align: center;
+      padding: 32px 20px;
+      color: var(--muted);
+      font-size: 0.95rem;
+      line-height: 1.6;
+    }
+    .msg strong {
+      display: block;
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.4rem;
+      color: var(--dark);
+      margin-bottom: 6px;
+    }
+
+    /* ── FOOTER ── */
+    footer {
+      margin-top: 60px;
+      text-align: center;
+      font-size: 0.75rem;
+      color: var(--border);
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <div class="rings">🎓</div>
+    <h1>Bienvenue au <em>Dîner de Graduation</em></h1>
+    <p class="subtitle">Entrez votre prénom pour trouver votre table</p>
+  </header>
+
+  <div class="divider"><span class="divider-icon">✦</span></div>
+
+  <div class="search-wrap">
+    <label for="prenom">Votre prénom</label>
+    <div class="input-row">
+      <input id="prenom" type="text" placeholder="ex. Marie" autocomplete="off" autocorrect="off" spellcheck="false"/>
+      <button onclick="rechercher()" title="Rechercher">→</button>
+    </div>
+  </div>
+
+  <div id="results"></div>
+
+  <footer>félicitations aux diplômés 🎓</footer>
+
+<script>
+  const TABLES = {
+    "Leadership":     ["DON","RACHEL","SIDOINE","ELORIE","AMA","LUCAS","ENOCK","CHRIST"],
+    "Accountability": ["MARINA","AUDREY","GUILLAUME","VIOLA","CLARE","KAFUI","PROSPER","LEA"],
+    "Compassion":     ["DAGOU","MAHOULAWÉ","KOMI","FREEDA","GRACE","KOSSÍ","MARIE","MOUSSA"],
+    "Communication":  ["MARTINE","ALICE","DONALD","MONAN","MICHELLE"],
+    "Resilience":     ["AMBA","MARTHE","PAIGE","YANN","ANTA","MARC","DONGO","BLANCHE"],
+    "Teamwork":       ["FLORA","PERPÉTUE","FAKAREL","MÉDARD","MATHY","MATHY ASSISTANCE","NATACHA","HONORÉ"],
+    "Respect":        ["CARINE","RUTH","EMILE","PÈRE VINCENT","YASMINE","EMERSONG","Mme Assoumou"],
+    "Empathy":        ["RÉGINE","MAMIE","PAPI","VIVIANE","MARIE LOUISE","ERIC","MADO"]
+  };
+
+  // Normalize: strip accents, lowercase
+  function normalize(str) {
+    return str.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase().trim();
+  }
+
+  // Table emoji per name
+  const TABLE_EMOJI = {
+    "Leadership":"🏆","Accountability":"📋","Compassion":"💛",
+    "Communication":"🗣️","Resilience":"💪","Teamwork":"🤝",
+    "Respect":"🌿","Empathy":"❤️"
+  };
+
+  // Enter key support
+  document.getElementById("prenom").addEventListener("keydown", e => {
+    if (e.key === "Enter") rechercher();
+  });
+
+  function rechercher() {
+    const input = document.getElementById("prenom").value;
+    const query = normalize(input);
+    const container = document.getElementById("results");
+    container.innerHTML = "";
+
+    if (!query) {
+      container.innerHTML = `<div class="msg"><strong>Entrez votre prénom</strong>et appuyez sur → pour trouver votre table.</div>`;
+      return;
+    }
+
+    const found = [];
+
+    for (const [tableName, guests] of Object.entries(TABLES)) {
+      for (const guest of guests) {
+        // Check if any word in guest name matches query
+        const parts = normalize(guest).split(/\s+/);
+        if (parts.some(p => p === query)) {
+          found.push({ guest, tableName });
+        }
+      }
+    }
+
+    if (found.length === 0) {
+      container.innerHTML = `<div class="msg"><strong>Prénom introuvable</strong>Vérifiez l'orthographe ou demandez de l'aide à l'accueil.</div>`;
+      return;
+    }
+
+    found.forEach(({ guest, tableName }, i) => {
+      const card = document.createElement("div");
+      card.className = "result-card";
+      card.style.animationDelay = `${i * 60}ms`;
+      card.innerHTML = `
+        <div class="result-icon">${TABLE_EMOJI[tableName] || "🌸"}</div>
+        <div class="result-info">
+          <div class="result-name">${guest}</div>
+          <div class="result-table"><span>Table ${tableName}</span></div>
+        </div>`;
+      container.appendChild(card);
+    });
+  }
+</script>
+</body>
+</html>
